@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/Login.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+  padding-top: 60px;
+  margin: 0;
+  overflow-y: auto;
+}
+
+/* ✅ Animation d’apparition fluide */
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(25px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-frame {
+  background-color: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  padding: 1.5rem 1.8rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 380px;
+  width: 85%;
+  margin: auto;
+  backdrop-filter: blur(6px);
+
+  /* ✅ Appliquer l’animation */
+  animation: fadeSlideUp 0.6s ease-out both;
+}
+
+.form-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 1.1rem;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.form-group-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.form-group {
+  width: 48%;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.82rem;
+  margin-bottom: 0.25rem;
+  color: #444;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 50.rem 0.6rem; /* ✅ champs plus petits */
+  font-size: 0.82rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.25s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #ad0000;
+  box-shadow: 0 0 6px rgba(173, 0, 0, 0.35);
+  background-color: #fffafa;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.submit-btn {
+  background-color: #ad0000;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #900000;
+  transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ✅ Responsive mobile */
+@media (max-width: 600px) {
+  .form-group-row {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+}

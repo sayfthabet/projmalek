@@ -1,0 +1,19 @@
+.trading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+  color: #333;
+  font-family: 'Roboto', sans-serif;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  font-size: 1rem;
+}

@@ -1,0 +1,30 @@
+<img src="/Logo-Traydi.png" alt="Traydi Logo" class="logo">
+<nav class="navbar">
+  <ul>
+    <li><a routerLink="/accueil" routerLinkActive="active" class="nav-link">Accueil</a></li>
+    <li><a routerLink="/trading" routerLinkActive="active" class="nav-link">Trading</a></li>
+    <li><a routerLink="/portfolio" routerLinkActive="active" class="nav-link">Portfolio</a></li>
+    <li><a routerLink="/communaute" routerLinkActive="active" class="nav-link">Communauté</a></li>
+    <li><a routerLink="/formation" routerLinkActive="active" class="nav-link">Formation</a></li>
+    <li><a routerLink="/contacts" routerLinkActive="active" class="nav-link">Contacts</a></li>
+  </ul>
+
+  <!-- Avant connexion -->
+  <div class="auth-buttons" *ngIf="!user">
+    <a routerLink="/login" class="auth-btn login-btn">Se connecter</a>
+    <a routerLink="/signup" class="auth-btn signup-btn">Créer un compte</a>
+  </div>
+
+  <!-- Après connexion -->
+  <div class="auth-buttons" *ngIf="user">
+    <div class="user-dropdown">
+      <div class="user-avatar" (click)="toggleDropdown()" title="{{ user.username }}">
+        <img [src]="getUserImage()" alt="User Avatar">
+        <div class="username">{{ user.username }}</div>
+      </div>
+      <div class="dropdown-menu" [class.show]="dropdownOpen">
+        <button (click)="logout()">Déconnexion</button>
+      </div>
+    </div>
+  </div>
+</nav>

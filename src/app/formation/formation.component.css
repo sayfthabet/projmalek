@@ -1,0 +1,25 @@
+.formation-container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+  background-color: #f5f5f5 !important;
+  color: #333 !important;
+  font-family: 'Roboto', sans-serif !important;
+  padding-top: 80px !important; /* Compense la navbar */
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+h2 {
+  font-size: 2rem !important;
+  margin-bottom: 1rem !important;
+  text-align: center !important;
+}
+
+p {
+  font-size: 1rem !important;
+  text-align: center !important;
+}

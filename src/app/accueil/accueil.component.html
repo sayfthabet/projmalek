@@ -1,0 +1,144 @@
+<div class="accueil-container">
+  <video class="background-video" autoplay loop muted playsinline>
+    <source src="/V1.mp4" type="video/mp4">
+  </video>
+  <img class="overlay-gif" src="/V2.gif" alt="Overlay Animation" #overlayGif>
+  <div class="content" [ngClass]="{'hidden': !showContent}">
+    <div class="welcome-message">Bienvenue sur Traydi !</div>
+    <!-- Section Héros -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1><span class="black-text">Découvre </span><span class="red-text">Traydi</span><span class="black-text"> : l’éclat argenté d’une </span><span class="highlight">culture</span><span class="black-text"> renouvelée !</span></h1>
+        <p class="hero-subtext">Traydi est la première plateforme tunisienne qui te forme, t’accompagne et te connecte à une communauté de traders passionnés.</p>
+        <div class="hero-buttons">
+          <a routerLink="/login" class="action-btn">Découvrir la plateforme</a>
+          <button class="action-btn">Commencer à trader</button>
+        </div>
+      </div>
+    </section>
+    <!-- Autres sections inchangées -->
+    <section class="platform-section">
+      <div class="frame frame-red">
+        <h2>Pourquoi choisir Traydi ?</h2>
+        <div class="platform-content">
+          <div class="platform-image">
+            <img src="/platform-image.png" alt="Interface Traydi">
+          </div>
+          <div class="platform-features">
+            <div class="feature">
+              <span class="icon">📈</span>
+              <p>Trading simple et rapide</p>
+            </div>
+            <div class="feature">
+              <span class="icon">🎓</span>
+              <p>Formations pour tous les niveaux</p>
+            </div>
+            <div class="feature">
+              <span class="icon">🤝</span>
+              <p>Communauté tunisienne active</p>
+            </div>
+            <div class="feature">
+              <span class="icon">🛡️</span>
+              <p>Sécurité et transparence des transactions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="how-it-works-section">
+      <div class="frame frame-white">
+        <h2>Comment ça marche ?</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step-number">1️⃣</span>
+            <p>Crée ton compte</p>
+          </div>
+          <div class="step">
+            <span class="step-number">2️⃣</span>
+            <p>Apprends les bases</p>
+          </div>
+          <div class="step">
+            <span class="step-number">3️⃣</span>
+            <p>Entraîne-toi sur un compte démo</p>
+          </div>
+          <div class="step">
+            <span class="step-number">4️⃣</span>
+            <p>Passe au trading réel</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="formation-section">
+      <div class="frame frame-red">
+        <h2>Apprends à trader</h2>
+        <p>Accède à des vidéos, webinaires et articles pour tous les niveaux. Commence avec nos formations gratuites pour débutants.</p>
+        <a href="/formation" class="action-btn">Découvrir les formations</a>
+      </div>
+    </section>
+    <section class="community-section">
+      <div class="frame frame-white">
+        <h2>Rejoins notre communauté tunisienne</h2>
+        <p>Ensemble, faisons du trading une nouvelle fierté tunisienne.</p>
+        <div class="testimonials">
+          <div class="testimonial">
+            <img src="/user1.png" alt="Trader">
+            <p>“Traydi m’a aidé à démarrer et à me connecter avec d’autres traders tunisiens !” - Amine</p>
+          </div>
+          <div class="testimonial">
+            <img src="/user2.png" alt="Trader">
+            <p>“Une plateforme qui comprend notre culture et nos ambitions.” - Yasmine</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="testimonials-section">
+      <div class="frame frame-red">
+        <h2>Ce que disent nos utilisateurs</h2>
+        <div class="testimonials">
+          <div class="testimonial">
+            <img src="/user3.png" alt="User">
+            <p>“Super plateforme, intuitive et sécurisée !” - Sami</p>
+            <p class="rating">★★★★★ 4.8/5</p>
+          </div>
+          <div class="testimonial">
+            <img src="/user4.png" alt="User">
+            <p>“Les formations m’ont donné confiance pour trader.” - Leila</p>
+            <p class="rating">★★★★★ 4.8/5</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="security-section">
+      <div class="frame frame-white">
+        <h2>Sécurité & Transparence</h2>
+        <p>Vos données et transactions sont protégées avec les plus hauts standards de sécurité.</p>
+        <div class="partners">
+          <img src="/partner1.png" alt="Partner 1">
+          <img src="/partner2.png" alt="Partner 2">
+        </div>
+      </div>
+    </section>
+    <section class="cta-section">
+      <div class="frame frame-red">
+        <h2>Rejoins la révolution du trading tunisien !</h2>
+        <button class="action-btn">Créer mon compte maintenant</button>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="frame frame-white">
+        <div class="footer-links">
+          <a href="/faq">FAQ</a>
+          <a href="/contacts">Contact</a>
+          <a href="/privacy">Politique de confidentialité</a>
+          <a href="/terms">Conditions d’utilisation</a>
+        </div>
+        <div class="social-links">
+          <a href="#">Facebook</a>
+          <a href="#">Twitter</a>
+          <a href="#">Instagram</a>
+        </div>
+        <p>© 2025 Traydi. Tous droits réservés.</p>
+      </div>
+    </footer>
+  </div>
+</div>

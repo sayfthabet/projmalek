@@ -1,0 +1,272 @@
+<div class="portfolio-container">
+  <div class="header">
+    <h1>Gestion de Portefeuille</h1>
+    <button class="btn btn-primary" (click)="showCreateForm = !showCreateForm" *ngIf="!showCreateForm">
+      + Créer un Portfolio
+    </button>
+  </div>
+
+  <!-- Messages d'erreur et de succès -->
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+    <button (click)="error = null" class="close-btn">×</button>
+  </div>
+  <div class="alert alert-success" *ngIf="success">
+    {{ success }}
+    <button (click)="success = null" class="close-btn">×</button>
+  </div>
+
+  <!-- Formulaire de création -->
+  <div class="form-card" *ngIf="showCreateForm">
+    <h2>Créer un nouveau Portfolio</h2>
+    <form (ngSubmit)="createPortfolio()">
+      <div class="form-group">
+        <label>Nom du Portfolio *</label>
+        <input type="text" [(ngModel)]="newPortfolio.nomPortefeuille" name="nomPortefeuille" required>
+      </div>
+      <div class="form-group">
+        <label>Solde initial (€) *</label>
+        <input type="number" [(ngModel)]="newPortfolio.solde" name="solde" min="0" required>
+      </div>
+      <div class="form-group">
+        <label>Type de Portfolio</label>
+        <select [(ngModel)]="newPortfolio.typePortefeuille" name="typePortefeuille">
+          <option value="individual">Individuel</option>
+          <option value="shared">Partagé</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Niveau de Risque (0-100)</label>
+        <input type="number" [(ngModel)]="newPortfolio.risque" name="risque" min="0" max="100">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="newPortfolio.description" name="description" rows="3"></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="loading">Créer</button>
+        <button type="button" class="btn btn-secondary" (click)="showCreateForm = false; resetCreateForm()">Annuler</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Liste des portfolios -->
+  <div class="portfolios-grid" *ngIf="!loading && portfolios.length > 0">
+    <div class="portfolio-card" 
+         *ngFor="let portfolio of portfolios" 
+         [class.selected]="selectedPortfolio?.id === portfolio.id"
+         (click)="selectPortfolio(portfolio)">
+      <div class="portfolio-header">
+        <h3>{{ portfolio.nomPortefeuille || 'Portfolio #' + portfolio.id }}</h3>
+        <span class="badge" [style.background-color]="getRiskColor(portfolio.risque)">
+          {{ getRiskLevel(portfolio.risque) }}
+        </span>
+      </div>
+      <div class="portfolio-body">
+        <div class="portfolio-info">
+          <div class="info-item">
+            <span class="label">Solde:</span>
+            <span class="value">{{ formatCurrency(portfolio.solde) }}</span>
+          </div>
+          <div class="info-item" *ngIf="portfolio.valeurNette">
+            <span class="label">Valeur Nette:</span>
+            <span class="value">{{ formatCurrency(portfolio.valeurNette) }}</span>
+          </div>
+          <div class="info-item" *ngIf="portfolio.rendementTotal !== undefined">
+            <span class="label">Rendement Total:</span>
+            <span class="value" [class.positive]="portfolio.rendementTotal! > 0" 
+                  [class.negative]="portfolio.rendementTotal! < 0">
+              {{ formatPercentage(portfolio.rendementTotal) }}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="label">Type:</span>
+            <span class="value">{{ portfolio.typePortefeuille === 'individual' ? 'Individuel' : 'Partagé' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message si aucun portfolio -->
+  <div class="empty-state" *ngIf="!loading && portfolios.length === 0 && !showCreateForm">
+    <p>Aucun portfolio trouvé. Créez votre premier portfolio pour commencer !</p>
+    <button class="btn btn-primary" (click)="showCreateForm = true">Créer un Portfolio</button>
+  </div>
+
+  <!-- Chargement -->
+  <div class="loading" *ngIf="loading">
+    <p>Chargement...</p>
+  </div>
+
+  <!-- Détails du portfolio sélectionné -->
+  <div class="portfolio-details" *ngIf="selectedPortfolio">
+    <div class="details-header">
+      <h2>{{ selectedPortfolio.nomPortefeuille || 'Portfolio #' + selectedPortfolio.id }}</h2>
+      <button class="btn btn-secondary" (click)="selectedPortfolio = null; analytics = null">Fermer</button>
+    </div>
+
+    <div class="details-tabs">
+      <button class="tab-btn" (click)="loadAnalytics(selectedPortfolio.id)">Analytics</button>
+      <button class="tab-btn" (click)="showDepositForm = !showDepositForm">Déposer</button>
+      <button class="tab-btn" (click)="showWithdrawForm = !showWithdrawForm">Retirer</button>
+      <button class="tab-btn" (click)="showTransferForm = !showTransferForm">Transférer</button>
+      <button class="tab-btn" (click)="generateReport()">Générer Rapport</button>
+    </div>
+
+    <!-- Formulaire de dépôt -->
+    <div class="form-card" *ngIf="showDepositForm">
+      <h3>Déposer des fonds</h3>
+      <form (ngSubmit)="depositFunds()">
+        <div class="form-group">
+          <label>Montant (€)</label>
+          <input type="number" [(ngModel)]="amount" name="amount" min="0" required>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="loading">Déposer</button>
+          <button type="button" class="btn btn-secondary" (click)="showDepositForm = false; amount = 0">Annuler</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Formulaire de retrait -->
+    <div class="form-card" *ngIf="showWithdrawForm">
+      <h3>Retirer des fonds</h3>
+      <form (ngSubmit)="withdrawFunds()">
+        <div class="form-group">
+          <label>Montant (€)</label>
+          <input type="number" [(ngModel)]="amount" name="amount" min="0" [max]="selectedPortfolio.solde" required>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="loading">Retirer</button>
+          <button type="button" class="btn btn-secondary" (click)="showWithdrawForm = false; amount = 0">Annuler</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Formulaire de transfert -->
+    <div class="form-card" *ngIf="showTransferForm">
+      <h3>Transférer des fonds</h3>
+      <form (ngSubmit)="transferFunds()">
+        <div class="form-group">
+          <label>Portfolio Source</label>
+          <select [(ngModel)]="transferData.idPortefeuilleSource" name="source" required>
+            <option [value]="selectedPortfolio.id">{{ selectedPortfolio.nomPortefeuille || 'Portfolio #' + selectedPortfolio.id }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Portfolio Destination</label>
+          <select [(ngModel)]="transferData.idPortefeuilleDestination" name="destination" required>
+            <option value="">Sélectionner un portfolio</option>
+            <option *ngFor="let p of portfolios" [value]="p.id" [disabled]="p.id === selectedPortfolio.id">
+              {{ p.nomPortefeuille || 'Portfolio #' + p.id }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Montant (€)</label>
+          <input type="number" [(ngModel)]="transferData.montant" name="montant" min="0" [max]="selectedPortfolio.solde" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="transferData.description" name="description" rows="2"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="loading">Transférer</button>
+          <button type="button" class="btn btn-secondary" (click)="showTransferForm = false; resetTransferForm()">Annuler</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Analytics -->
+    <div class="analytics-section" *ngIf="analytics">
+      <h3>Analytics du Portfolio</h3>
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <h4>Performance</h4>
+          <div class="metric">
+            <span class="metric-label">Rendement Total:</span>
+            <span class="metric-value" [class.positive]="analytics.rendementTotal! > 0" 
+                  [class.negative]="analytics.rendementTotal! < 0">
+              {{ formatPercentage(analytics.rendementTotal) }}
+            </span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Rendement Annuel:</span>
+            <span class="metric-value" [class.positive]="analytics.rendementAnnuel! > 0" 
+                  [class.negative]="analytics.rendementAnnuel! < 0">
+              {{ formatPercentage(analytics.rendementAnnuel) }}
+            </span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Ratio Sharpe:</span>
+            <span class="metric-value">{{ analytics.ratioSharpe?.toFixed(2) || 'N/A' }}</span>
+          </div>
+        </div>
+
+        <div class="analytics-card">
+          <h4>Risque</h4>
+          <div class="metric">
+            <span class="metric-label">Niveau de Risque:</span>
+            <span class="metric-value">{{ analytics.niveauRisque || 'N/A' }}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Volatilité:</span>
+            <span class="metric-value">{{ formatPercentage(analytics.volatilite) }}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Drawdown Maximal:</span>
+            <span class="metric-value">{{ formatPercentage(analytics.drawdownMaximal) }}</span>
+          </div>
+        </div>
+
+        <div class="analytics-card">
+          <h4>Statistiques</h4>
+          <div class="metric">
+            <span class="metric-label">Total Transactions:</span>
+            <span class="metric-value">{{ analytics.totalTransactions || 0 }}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Taille Moyenne:</span>
+            <span class="metric-value">{{ formatCurrency(analytics.tailleMoyenneTransaction) }}</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Taux de Réussite:</span>
+            <span class="metric-value">{{ formatPercentage(analytics.tauxReussite) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informations générales -->
+    <div class="info-section">
+      <h3>Informations Générales</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">ID:</span>
+          <span class="value">{{ selectedPortfolio.id }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Solde:</span>
+          <span class="value">{{ formatCurrency(selectedPortfolio.solde) }}</span>
+        </div>
+        <div class="info-item" *ngIf="selectedPortfolio.valeurNette">
+          <span class="label">Valeur Nette:</span>
+          <span class="value">{{ formatCurrency(selectedPortfolio.valeurNette) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Risque:</span>
+          <span class="value">{{ selectedPortfolio.risque || 0 }}%</span>
+        </div>
+        <div class="info-item" *ngIf="selectedPortfolio.description">
+          <span class="label">Description:</span>
+          <span class="value">{{ selectedPortfolio.description }}</span>
+        </div>
+        <div class="info-item" *ngIf="selectedPortfolio.dateCreation">
+          <span class="label">Date de Création:</span>
+          <span class="value">{{ selectedPortfolio.dateCreation | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
